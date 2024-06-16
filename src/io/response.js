@@ -1,7 +1,8 @@
-const response = (err, req, res)=>{
-    console.log("---->",err);
-    res.status(200).send({
-        "message": "success"
+const response = (err, req, res, next)=>{
+    req.statusCode = err;
+    res.json({
+        "status": err,
+        "body": req.responseBody || {}
     });
 };
 
