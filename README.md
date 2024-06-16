@@ -1,3 +1,2 @@
-# rest-api
-My first git repository
-# api details
+# BE-movie-review-system
+Backend Application for Movies Review System
