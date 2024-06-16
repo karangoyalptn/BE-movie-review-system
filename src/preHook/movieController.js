@@ -4,9 +4,8 @@ import helpers from "../miscellenous/helpers.js";
 class Movie {
     static getReviews = async (req, res, next) => {
         try {
-            console.log("---------------------->",req.params)
             const id = req.params.id;
-            const movieReviews = await MovieSchema.findOne({ movieId: parseInt(id) }, { _id: 1, user: 1, review: 1 }) || [];
+            const movieReviews = await MovieSchema.find({ movieId: parseInt(id) }, { _id: 1, user: 1, review: 1 }) || [];
             req.responseBody = movieReviews;
             console.log({ data: JSON.stringify(movieReviews) }, "Got Movie Review");
             next(helpers.statusCodes.SUCCESS);
@@ -37,13 +36,13 @@ class Movie {
     static getReview = async(req, res, next)=> {
         try {
             const id = req.params.id;
-            const review = await MovieSchema.findOne({_id: id});
+            const review = await MovieSchema.findOne({_id: id}, {_id:0, user: 1, review: 1 });
             if (!review) {
                 throw new Error("review not found");
             }
             req.responseBody = review;
             next(helpers.statusCodes.SUCCESS);
-        } catch (e) {
+        } catch (error) {
             console.error({ ...req.params, error: error.toString(), stack: error.stack }, "Error getting ReviewById");
             next(helpers.statusCodes.BAD_REQUEST);
         }
@@ -52,13 +51,13 @@ class Movie {
     static updateReview = async(req, res, next)=> {
         try {
             const id = req.params.id;
-            const review = await MovieSchema.findOneAndUpdate({_id: id, user: req.body.user}, {review: review});
+            const review = await MovieSchema.findOneAndUpdate({_id: id, user: req.body.user}, {review: req.body.review, updatedAt: new Date()});
             if (!review) {
                 throw new Error("review not found");
             }
             req.responseBody = review;
             next(helpers.statusCodes.SUCCESS);
-        } catch (e) {
+        } catch (error) {
             console.error({ ...req.params, error: error.toString(), stack: error.stack }, "Error updating ReviewById");
             next(helpers.statusCodes.BAD_REQUEST);
         }
@@ -73,7 +72,7 @@ class Movie {
             }
             req.responseBody = review;
             next(helpers.statusCodes.SUCCESS);
-        } catch (e) {
+        } catch (error) {
             console.error({ ...req.params, error: error.toString(), stack: error.stack }, "Error deleting ReviewById");
             next(helpers.statusCodes.BAD_REQUEST);
         }
