@@ -1,20 +1,25 @@
 import express from "express";
-import 'dotenv/config';
+import "dotenv/config";
 import routes from "./src/routes/index.js";
 import response from "./src/io/response.js";
 import Server from "./server.js";
+import cors from "cors";
 
 const app = express();
-const port = process.env.PORT || '3000';
+const port = process.env.PORT || "3000";
 
 const server = new Server();
+const logger = server.getlogger();
+
 await server.init()
     .then(() => {
+        app.use(cors());
         app.use(express.json());
-        app.use('/', routes);
+        app.use(server.attachLogger);
+        app.use("/", routes);
         app.use(response);
         app.listen(port, () => {
-            console.log(`server listening on port ${port}`);
+            logger.info(`server listening on port ${port}`);
         });
     })
     .catch(async (error) => {
@@ -23,25 +28,25 @@ await server.init()
 
     })
 
-process.on('uncaughtException', async()=>{
+process.on("uncaughtException", async()=>{
     
 })
 
-process.on('SIGTERM', async()=>{
+process.on("SIGTERM", async()=>{
     await shutDown();
 })
 
-process.on('SIGINT', async()=>{
+process.on("SIGINT", async()=>{
     await shutDown();
 })
 
 const shutDown = async()=>{
     try{
         await server.close();
-        console.log("successfully shutting down");
+        logger.info("successfully shutting down");
         process.exit(0);
     }catch(e){
-        console.log("error while shutting down");
+        logger.error("error while shutting down");
         process.exit(1);
     }
 }

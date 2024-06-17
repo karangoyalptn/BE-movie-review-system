@@ -8,12 +8,12 @@ export default class Redis {
         this.connectionString = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@dev.wgijvux.mongodb.net/?retryWrites=true&w=majority&appName=dev`;
     }
 
-    init = async()=>{
+    init = async(logger)=>{
         try{
             await redisDB1.ping();
-            console.log('Redis connected');
-        }catch(e){
-            console.error('Error connecting to Redis:', error.message);
+            logger.info("Redis connected");
+        }catch(error){
+            logger.error({error: error.message, message: "Error connecting to Redis"});
             throw error;
         }
     }

@@ -13,13 +13,16 @@
   "author": "Karan Goyal",
   "license": "ISC",
   "dependencies": {
+    "ajv": "^8.16.0",
     "axios": "^1.7.2",
+    "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.4.1"
+    "mongoose": "^8.4.1",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.5.0",

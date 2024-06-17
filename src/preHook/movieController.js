@@ -7,10 +7,10 @@ class Movie {
             const id = req.params.id;
             const movieReviews = await MovieSchema.find({ movieId: parseInt(id) }, { _id: 1, user: 1, review: 1 }) || [];
             req.responseBody = movieReviews;
-            console.log({ data: JSON.stringify(movieReviews) }, "Got Movie Review");
+            req.log.info({ data: JSON.stringify(movieReviews), message: "Got Movie Review" });
             next(helpers.statusCodes.SUCCESS);
         } catch (error) {
-            console.error({ ...req.params, error: error.toString(), stack: error.stack }, "Error getting Movie Review");
+            req.log.error({ ...req.params, error: error.toString(), stack: error.stack, message: "Error getting Movie Review" });
             next(helpers.statusCodes.BAD_REQUEST);
         }
     }
@@ -25,10 +25,10 @@ class Movie {
 
             const savedMovie = await newMovie.save();
             req.responseBody = {};
-            console.log({ data: JSON.stringify(savedMovie) }, "Created Movie Review");
+            req.log.info({ data: JSON.stringify(savedMovie), message: "Created Movie Review" });
             next(helpers.statusCodes.SUCCESS);
         } catch (error) {
-            console.error({ ...req.body, error: error.toString(), stack: error.stack }, "Error creating Movie Review");
+            req.log.error({ ...req.body, error: error.toString(), stack: error.stack, message: "Error creating Movie Review" });
             next(helpers.statusCodes.BAD_REQUEST);
         }
     }
@@ -43,7 +43,7 @@ class Movie {
             req.responseBody = review;
             next(helpers.statusCodes.SUCCESS);
         } catch (error) {
-            console.error({ ...req.params, error: error.toString(), stack: error.stack }, "Error getting ReviewById");
+            req.log.error({ ...req.params, error: error.toString(), stack: error.stack, message: "Error getting ReviewById" });
             next(helpers.statusCodes.BAD_REQUEST);
         }
     }
@@ -58,7 +58,7 @@ class Movie {
             req.responseBody = review;
             next(helpers.statusCodes.SUCCESS);
         } catch (error) {
-            console.error({ ...req.params, error: error.toString(), stack: error.stack }, "Error updating ReviewById");
+            req.log.error({ ...req.params, error: error.toString(), stack: error.stack, message: "Error updating ReviewById" });
             next(helpers.statusCodes.BAD_REQUEST);
         }
     }
@@ -73,7 +73,7 @@ class Movie {
             req.responseBody = review;
             next(helpers.statusCodes.SUCCESS);
         } catch (error) {
-            console.error({ ...req.params, error: error.toString(), stack: error.stack }, "Error deleting ReviewById");
+            req.log.error({ ...req.params, error: error.toString(), stack: error.stack, message: "Error deleting ReviewById" });
             next(helpers.statusCodes.BAD_REQUEST);
         }
     }
