@@ -1,5 +1,6 @@
 import MovieSchema from "../data/schemas/movie.js";
 import helpers from "../miscellenous/helpers.js";
+import Redis from "../db/redis.js"
 
 class Movie {
     static getReviews = async (req, res, next) => {
@@ -17,6 +18,11 @@ class Movie {
 
     static saveReviews = async (req, res, next) => {
         try {
+            const redis = new Redis(req.log);
+            const canAddReview = await redis.getUser(req.body.user);
+            if(!canAddReview){
+                throw new Error("Review Limit exceeded, please try after sometime");
+            }
             const newMovie = new MovieSchema({
                 movieId: parseInt(req.body.movieId),
                 user: req.body.user,
@@ -29,6 +35,7 @@ class Movie {
             next(helpers.statusCodes.SUCCESS);
         } catch (error) {
             req.log.error({ ...req.body, error: error.toString(), stack: error.stack, message: "Error creating Movie Review" });
+            req.errorMessage = error.toString();
             next(helpers.statusCodes.BAD_REQUEST);
         }
     }
