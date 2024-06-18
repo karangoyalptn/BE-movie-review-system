@@ -37,7 +37,7 @@ export default class Redis {
             const pipeline = redisDB0.pipeline();
             const key = this.user(user);
             pipeline.set(key, "true");
-            pipeline.expire(key, 10);
+            pipeline.expire(key, 10);  //TODO: move it to config or constant file
             await pipeline.exec();
         } catch (error) {
             this.logger({ "error": error.message, "message": "Error while setting data to Redis" });
