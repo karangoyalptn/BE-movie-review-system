@@ -24,11 +24,23 @@ export default class Redis {
 
     getUser = async (user) => {
         try {
-            let data = await redisDB0.exists(`user:${this.user(user)}`);
+            let data = await redisDB0.exists(this.user(user));
             return !data;
         } catch (error) {
             this.logger({ "error": error.message, "message": "Error while finding data from Redis" });
             return 1;
+        }
+    }
+
+    setUser = async (user) => {
+        try {
+            const pipeline = redisDB0.pipeline();
+            const key = this.user(user);
+            pipeline.set(key, "true");
+            pipeline.expire(key, 10);
+            await pipeline.exec();
+        } catch (error) {
+            this.logger({ "error": error.message, "message": "Error while setting data to Redis" });
         }
     }
 }

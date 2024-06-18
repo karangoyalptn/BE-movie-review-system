@@ -3,7 +3,7 @@ import helpers from "../miscellenous/helpers.js";
 class ErrorMap {
     constructor(){
         this.saveReviewMapper = {
-            "Review Limit exceeded, please try after sometime" : "Please try after sometime...",
+            "Error: Review Limit exceeded, please try after sometime" : "Please try after sometime...",
             "default" : "something went wrong!"
         }
     }

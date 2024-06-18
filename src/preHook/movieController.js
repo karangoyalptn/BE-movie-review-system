@@ -31,6 +31,9 @@ class Movie {
 
             const savedMovie = await newMovie.save();
             req.responseBody = {};
+            process.nextTick(()=>{
+                redis.setUser(req.body.user);
+            })
             req.log.info({ data: JSON.stringify(savedMovie), message: "Created Movie Review" });
             next(helpers.statusCodes.SUCCESS);
         } catch (error) {
